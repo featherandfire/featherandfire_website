@@ -1,70 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<!--<!DOCTYPE html>-->
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Feather & Fire{% endblock %}</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f5f5f5;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ember': '#C0622A',
+                        'ember-light': '#D97B44',
+                        'ash': '#1a1714',
+                        'ash-mid': '#252119',
+                        'ash-light': '#2e2a24',
+                        'smoke': '#8a8278',
+                        'parchment': '#e8dfd0',
+                        'parchment-dim': '#b5a99a',
+                    },
+                    fontFamily: {
+                        'display': ['Cormorant Garamond', 'serif'],
+                        'body': ['Josefin Sans', 'sans-serif'],
+                    },
+                }
+            }
         }
-
-        header {
-            background: #1e1e1e;
-            color: white;
-            padding: 15px 40px;
-        }
-
-        nav a {
-            color: white;
-            margin-right: 20px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        .container {
-            padding: 40px;
-        }
-
-        footer {
-            background: #1e1e1e;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 40px;
-        }
-    </style>
+    </script>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
 
-<header>
-    <h2>Feather & Fire</h2>
-    <nav>
-        <a href="/">Home</a>
-        <a href="#">Shop</a>
-        <a href="#">Art</a>
-        <a href="#">Books</a>
-        <a href="#">Contact</a>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(26,23,20,0.92); backdrop-filter: blur(12px);">
+        <div class="max-w-6xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+
+            <!-- Logo -->
+            <a href="/" class="logo-text text-2xl text-parchment tracking-wide">
+                Feather & Fire
+            </a>
+
+            <!-- Nav links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/gallery/" class="nav-link">Gallery</a>
+                <a href="/about/" class="nav-link">About</a>
+            </div>
+
+            <!-- Auth -->
+            <div class="flex items-center gap-6">
+                {% if user.is_authenticated %}
+                    <span class="nav-link" style="color: #8a8278; cursor: default;">{{ user.email }}</span>
+                    <a href="{% url 'account_logout' %}" class="nav-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'account_login' %}" class="nav-link">Login</a>
+                    <a href="{% url 'account_signup' %}" class="text-xs uppercase tracking-widest px-4 py-2 border border-ember text-ember hover:bg-ember hover:text-ash transition-all duration-300" style="font-family: 'Josefin Sans', sans-serif;">
+                        Join
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
-</header>
 
-<div class="container">
+    <!-- Messages -->
+    {% if messages %}
+    <div class="fixed top-16 left-0 right-0 z-40 px-6 pt-3">
+        <div class="max-w-6xl mx-auto space-y-2">
+            {% for message in messages %}
+            <div class="message-{{ message.tags }} px-4 py-3 text-sm font-body tracking-wide rounded-sm">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
-    {% block content %}
-    {% endblock %}
+    <!-- Main content -->
+    <main class="flex-1 pt-16">
+        {% block content %}
+        {% endblock %}
+    </main>
 
-</div>
+    <!-- Footer -->
+    <footer class="border-t border-white/5 mt-24" style="background: #141210;">
+        <div class="max-w-6xl mx-auto px-6 lg:px-10 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
 
-<footer>
-    <p>© 2026 Feather & Fire</p>
-</footer>
+                <!-- Brand -->
+                <div>
+                    <p class="logo-text text-xl text-parchment mb-3">Feather & Fire</p>
+                    <p class="text-smoke text-xs leading-relaxed tracking-wide" style="font-family: 'Josefin Sans', sans-serif;">
+                        A marketplace for original art.<br>
+                        Supporting independent artists.
+                    </p>
+                    <div class="ember-divider"></div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-parchment-dim mb-5" style="font-family: 'Josefin Sans', sans-serif;">Explore</p>
+                    <div class="space-y-3">
+                        <div><a href="/gallery/">Gallery</a></div>
+                        <div><a href="/about/">About</a></div>
+                        <div><a href="/contact/">Contact</a></div>
+                    </div>
+                </div>
+
+                <!-- Account -->
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-parchment-dim mb-5" style="font-family: 'Josefin Sans', sans-serif;">Account</p>
+                    <div class="space-y-3">
+                        {% if user.is_authenticated %}
+                            <div><a href="/accounts/logout/">Logout</a></div>
+                        {% else %}
+                            <div><a href="/accounts/login/">Login</a></div>
+                            <div><a href="/accounts/signup/">Create account</a></div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-smoke text-xs tracking-widest uppercase" style="font-family: 'Josefin Sans', sans-serif;">
+                    &copy; 2026 Feather & Fire
+                </p>
+                <div class="flex gap-6">
+                    <a href="/privacy/">Privacy</a>
+                    <a href="/terms/">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

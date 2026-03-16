@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account — Feather & Fire{% endblock %}
+
+{% block content %}
+
+<section class="min-h-screen flex items-center justify-center py-24 relative" style="background: #1a1714;">
+
+    <!-- Background glow -->
+    <div style="position: absolute; top: 30%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(circle, rgba(192,98,42,0.05) 0%, transparent 70%); pointer-events: none;"></div>
+
+    <!-- Grid texture -->
+    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;"></div>
+
+    <div class="w-full max-w-md mx-auto px-6 relative z-10">
+
+        <!-- Logo -->
+        <div class="text-center mb-10">
+            <a href="/" class="font-display font-light italic text-3xl" style="color: #e8dfd0;">Feather & Fire</a>
+            <div style="width: 40px; height: 1px; background: #C0622A; margin: 1rem auto 0;"></div>
+        </div>
+
+        <!-- Card -->
+        <div style="background: #141210; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 4px; padding: 2.5rem;">
+
+            <h1 class="font-display font-light text-2xl mb-1" style="color: #e8dfd0;">Join the community</h1>
+            <p class="text-xs uppercase tracking-widest mb-8" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Create your account</p>
+
+            <form method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+
+                <!-- Account type -->
+                <div class="mb-6">
+                    <label class="block text-xs uppercase tracking-widest mb-3" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">I am joining as</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center gap-3 cursor-pointer p-3 transition-all duration-300"
+                               style="border: 0.5px solid rgba(255,255,255,0.1); border-radius: 2px;"
+                               id="buyer-label">
+                            <input type="radio" name="account_type" value="buyer" checked
+                                   style="accent-color: #C0622A;"
+                                   onchange="updateLabels()">
+                            <div>
+                                <p class="text-xs font-medium" style="color: #e8dfd0; font-family: 'Josefin Sans', sans-serif;">Buyer</p>
+                                <p class="text-xs" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Browse & collect</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer p-3 transition-all duration-300"
+                               style="border: 0.5px solid rgba(255,255,255,0.1); border-radius: 2px;"
+                               id="seller-label">
+                            <input type="radio" name="account_type" value="seller"
+                                   style="accent-color: #C0622A;"
+                                   onchange="updateLabels()">
+                            <div>
+                                <p class="text-xs font-medium" style="color: #e8dfd0; font-family: 'Josefin Sans', sans-serif;">Artist</p>
+                                <p class="text-xs" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Sell your work</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="mb-5">
+                    <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Email</label>
+                    <input type="email" name="email" required autofocus
+                           placeholder="your@email.com"
+                           style="width: 100%; background: #1a1714; border: 0.5px solid rgba(255,255,255,0.1); border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                </div>
+
+                <!-- Password -->
+                <div class="mb-5">
+                    <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Password</label>
+                    <input type="password" name="password1" required
+                           placeholder="••••••••"
+                           style="width: 100%; background: #1a1714; border: 0.5px solid rgba(255,255,255,0.1); border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                </div>
+
+                <!-- Confirm password -->
+                <div class="mb-7">
+                    <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Confirm Password</label>
+                    <input type="password" name="password2" required
+                           placeholder="••••••••"
+                           style="width: 100%; background: #1a1714; border: 0.5px solid rgba(255,255,255,0.1); border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; box-sizing: border-box;"
+                           onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                </div>
+
+                <!-- Errors -->
+                {% if form.errors %}
+                <div class="mb-5 px-4 py-3 text-xs" style="background: #2e1e1e; border-left: 2px solid #C0622A; color: #d4a882; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.05em;">
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Submit -->
+                <button type="submit" class="w-full py-3 text-xs uppercase tracking-widest transition-all duration-300"
+                        style="background: #C0622A; color: #1a1714; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em; border: none; cursor: pointer;"
+                        onmouseover="this.style.background='#D97B44'" onmouseout="this.style.background='#C0622A'">
+                    Create Account
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Login link -->
+        <p class="text-center mt-6 text-xs uppercase tracking-widest" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">
+            Already have an account?
+            <a href="{% url 'account_login' %}" style="color: #C0622A; margin-left: 6px; transition: color 0.3s;"
+               onmouseover="this.style.color='#D97B44'" onmouseout="this.style.color='#C0622A'">
+                Sign in
+            </a>
+        </p>
+
+    </div>
+</section>
+
+<script>
+function updateLabels() {
+    const buyerRadio = document.querySelector('input[value="buyer"]');
+    const sellerRadio = document.querySelector('input[value="seller"]');
+    const buyerLabel = document.getElementById('buyer-label');
+    const sellerLabel = document.getElementById('seller-label');
+
+    if (buyerRadio.checked) {
+        buyerLabel.style.borderColor = '#C0622A';
+        sellerLabel.style.borderColor = 'rgba(255,255,255,0.1)';
+    } else {
+        sellerLabel.style.borderColor = '#C0622A';
+        buyerLabel.style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+}
+updateLabels();
+</script>
+
+{% endblock %}
