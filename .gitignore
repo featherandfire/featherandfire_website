@@ -2,13 +2,10 @@
 __pycache__/
 *.py[cod]
 
-# Virtual environments
 venv/
 
-# Environment variables
 .env
 
-# Secrets
 *.pem
 
 # MacOS
@@ -21,6 +18,14 @@ staticfiles/
 # Editors
 .vscode/
 .idea/
+
+#virtual env vars
+bin/
+lib/
+pyvenv.cfg
+*.pyc
+__pycache__/
+db.sqlite3
 
 
 
