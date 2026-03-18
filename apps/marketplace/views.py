@@ -84,15 +84,18 @@ def stripe_webhook(request):
     except (ValueError, stripe.error.SignatureVerificationError):
         return HttpResponse(status=400)
 
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
+    if event['type'] == 'payment_intent.succeeded':
+        payment_intent = event['data']['object']
         try:
-            order = Order.objects.get(stripe_session_id=session['id'])
-            order.paid = True
-            order.buyer_email = session.get('customer_details', {}).get('email', '')
-            order.save()
-            order.artwork.is_sold = True
-            order.artwork.save()
+            sessions = stripe.checkout.Session.list(payment_intent=payment_intent['id'])
+            if sessions.data:
+                session = sessions.data[0]
+                order = Order.objects.get(stripe_session_id=session['id'])
+                order.paid = True
+                order.buyer_email = session.get('customer_details', {}).get('email', '')
+                order.save()
+                order.artwork.is_sold = True
+                order.artwork.save()
         except Order.DoesNotExist:
             pass
 
