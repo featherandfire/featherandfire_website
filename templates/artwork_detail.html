@@ -43,11 +43,11 @@
                     Sold
                 </p>
                 {% else %}
-                <a href="#inquire"
-                   class="inline-block px-10 py-3 text-xs uppercase tracking-widest mb-10 transition-all duration-300"
-                   style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;">
-                    Inquire to Purchase
-                </a>
+                <button disabled
+                        class="inline-block px-10 py-3 text-xs uppercase tracking-widest mb-10"
+                        style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em; cursor: not-allowed; opacity: 0.6; border: none;">
+                    Buy Now — Coming Soon
+                </button>
                 {% endif %}
 
                 <!-- Artist -->
@@ -85,24 +85,6 @@
             </div>
         </div>
 
-        <!-- Inquire section -->
-        {% if not artwork.is_sold %}
-        <div id="inquire" class="mt-24 max-w-2xl">
-            <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Interested?</p>
-            <h2 class="font-display font-light mb-6" style="font-size: clamp(1.5rem, 3vw, 2.5rem); color: #e8dfd0;">
-                <em>Get in touch</em>
-            </h2>
-            <div class="ember-line-lg"></div>
-            <p class="text-xs leading-relaxed mb-8" style="color: #8a8278;">
-                Send us a message and we'll connect you directly with the artist.
-            </p>
-            <a href="{% url 'apply' %}?inquiry={{ artwork.pk }}"
-               class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
-               style="border: 1px solid #C0622A; color: #C0622A; letter-spacing: 0.15em;">
-                Send Inquiry
-            </a>
-        </div>
-        {% endif %}
 
     </div>
 </section>
