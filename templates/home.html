@@ -86,11 +86,11 @@
 <div style="background: #141210; border-top: 0.5px solid rgba(255,255,255,0.05); border-bottom: 0.5px solid rgba(255,255,255,0.05);">
     <div class="max-w-6xl mx-auto px-6 lg:px-10 py-6 grid grid-cols-3 divide-x">
         <div class="text-center px-4">
-            <p class="font-display font-light text-2xl" style="color: #e8dfd0;">100+</p>
+            <p class="font-display font-light text-2xl" style="color: #e8dfd0;">{{ artwork_count }}</p>
             <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278;">Original works</p>
         </div>
         <div class="text-center px-4">
-            <p class="font-display font-light text-2xl" style="color: #e8dfd0;">24</p>
+            <p class="font-display font-light text-2xl" style="color: #e8dfd0;">{{ artist_count }}</p>
             <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278;">Artists</p>
         </div>
         <div class="text-center px-4">
@@ -121,89 +121,42 @@
         <!-- Artist cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            {% comment %}
-            Replace this with real artist data when you have it:
-            {% for artist in featured_artists %}
-            {% endcomment %}
-
-            <!-- Artist card 1 - Heather -->
+            {% for profile in featured_artists %}
             <div class="group cursor-pointer"
                  style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
                 <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <img src="{% static 'images/artists/heather_profile.jpg' %}"
-                             alt="Heather Whittlesey"
+                        {% if profile.profile_photo %}
+                        <img src="{{ profile.profile_photo.url }}"
+                             alt="{{ profile.display_name }}"
                              style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
+                        {% else %}
+                        <div style="width: 120px; height: 120px; border-radius: 50%; background: #2e2a24; border: 1px solid rgba(255,255,255,0.1);"></div>
+                        {% endif %}
                     </div>
                     <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
                          class="group-hover:opacity-100"></div>
                 </div>
                 <div class="p-5">
                     <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
-                        <em>Heather Whittlesey</em>
+                        <em>{{ profile.display_name }}</em>
                     </p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Ceramics · Midwest</p>
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">
+                        {{ profile.medium }}{% if profile.location %} · {{ profile.location }}{% endif %}
+                    </p>
                     <div class="ember-line"></div>
                     <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
-                        Heather Whittlesey is a mixed media artist that works with sculpture, paper, clay and glass.
+                        {{ profile.bio|truncatechars:120 }}
                     </p>
                     <a href="#" class="text-xs uppercase tracking-widest"
                        style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
                 </div>
             </div>
-
-            <!-- Artist card 2 - Alexis -->
-            <div class="group cursor-pointer"
-                 style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <img src="{% static 'images/artists/alexis_profile.jpg' %}"
-                             alt="Alexis Dwyer"
-                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
-                    </div>
-                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
-                         class="group-hover:opacity-100"></div>
-                </div>
-                <div class="p-5">
-                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
-                        <em>Alexis Dwyer</em>
-                    </p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Prints · Midwest</p>
-                    <div class="ember-line"></div>
-                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
-                        Alexis is a printmaker and painter and art teacher.
-                    </p>
-                    <a href="#" class="text-xs uppercase tracking-widest"
-                       style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
-                </div>
-            </div>
-
-            <!-- Artist card 3 - Rachel -->
-            <div class="group cursor-pointer"
-                 style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <img src="{% static 'images/artists/rachel_profile.jpg' %}"
-                             alt="Rachel Buse"
-                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
-                    </div>
-                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
-                         class="group-hover:opacity-100"></div>
-                </div>
-                <div class="p-5">
-                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
-                        <em>Rachel Buse</em>
-                    </p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Community Art · Midwest</p>
-                    <div class="ember-line"></div>
-                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
-                        Rachel is a community based artist that activates neighborhood participation. She specializes
-                        in group installation and drawing.
-                    </p>
-                    <a href="#" class="text-xs uppercase tracking-widest"
-                       style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
-                </div>
-            </div>
+            {% empty %}
+            <p class="text-xs uppercase tracking-widest col-span-3 text-center py-12" style="color: #8a8278;">
+                No featured artists yet.
+            </p>
+            {% endfor %}
 
         </div>
     </div>

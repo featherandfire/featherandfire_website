@@ -1,9 +1,19 @@
 from django.shortcuts import render
 from .models import Artwork
+from apps.users.models import ArtistProfile
 
 
 def home(request):
-    return render(request, 'home.html')
+    featured_artists = ArtistProfile.objects.filter(is_featured=True).select_related('user')[:3]
+    artwork_count = Artwork.objects.count()
+    artist_count = ArtistProfile.objects.count()
+
+    context = {
+        'featured_artists': featured_artists,
+        'artwork_count': artwork_count,
+        'artist_count': artist_count,
+    }
+    return render(request, 'home.html', context)
 
 
 def gallery(request):
