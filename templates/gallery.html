@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Gallery — Feather & Fire{% endblock %}
+{% block content %}
+
+<!-- Page header -->
+<section class="pt-20 pb-12" style="background: #1a1714; border-bottom: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Original works</p>
+        <h1 class="font-display font-light" style="font-size: clamp(2.5rem, 5vw, 4rem); color: #e8dfd0;">
+            The Gallery
+        </h1>
+    </div>
+</section>
+
+<!-- Filters -->
+<section style="background: #141210; border-bottom: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-5 flex items-center gap-4 flex-wrap">
+        <a href="{% url 'gallery' %}"
+           class="text-xs uppercase tracking-widest px-4 py-2 transition-all duration-200"
+           style="{% if not selected_medium %}background: #C0622A; color: #1a1714;{% else %}color: #8a8278; border: 0.5px solid #3a3530;{% endif %}">
+            All
+        </a>
+        {% for value, label in medium_choices %}
+        <a href="{% url 'gallery' %}?medium={{ value }}"
+           class="text-xs uppercase tracking-widest px-4 py-2 transition-all duration-200"
+           style="{% if selected_medium == value %}background: #C0622A; color: #1a1714;{% else %}color: #8a8278; border: 0.5px solid #3a3530;{% endif %}">
+            {{ label }}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Grid -->
+<section class="py-16" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+        {% if artworks %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for artwork in artworks %}
+            <div class="group" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210;">
+
+                <!-- Image -->
+                <div style="aspect-ratio: 4/3; overflow: hidden; background: #252119; position: relative;">
+                    <img src="{{ artwork.image.url }}"
+                         alt="{{ artwork.title }}"
+                         style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
+                         class="group-hover:scale-105">
+                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.06); opacity: 0; transition: opacity 0.3s;"
+                         class="group-hover:opacity-100"></div>
+                </div>
+
+                <!-- Info -->
+                <div class="p-5">
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <p class="font-display font-light text-lg leading-tight" style="color: #e8dfd0;">
+                            <em>{{ artwork.title }}</em>
+                        </p>
+                        <p class="font-display text-lg shrink-0" style="color: #C0622A;">${{ artwork.price }}</p>
+                    </div>
+
+                    <div class="ember-line"></div>
+
+                    {% with profile=artwork.artist.artist_profile %}
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">
+                        {{ artwork.get_medium_display }}
+                        {% if profile %} · {{ profile.display_name }}{% endif %}
+                    </p>
+                    {% endwith %}
+
+                    {% if artwork.description %}
+                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
+                        {{ artwork.description|truncatechars:100 }}
+                    </p>
+                    {% endif %}
+
+                    <a href="#" class="text-xs uppercase tracking-widest" style="color: #C0622A; letter-spacing: 0.15em;">
+                        View piece →
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="text-center py-32">
+            <p class="font-display font-light text-3xl mb-4" style="color: #e8dfd0;"><em>No works yet</em></p>
+            <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">
+                {% if selected_medium %}No available works in this medium.{% else %}Check back soon.{% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

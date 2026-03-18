@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Feather & Fire — Original Art Marketplace{% endblock %}
 {% block content %}
 
@@ -15,26 +16,29 @@
 
         <!-- Left: Headline -->
         <div>
-            <p class="text-xs uppercase tracking-widest mb-6" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif;">Original artwork</p>
+            <p class="text-xs uppercase tracking-widest mb-6" style="color: #C0622A;">Original artwork</p>
 
-            <h1 class="font-display font-light leading-none mb-8" style="font-size: clamp(3rem, 6vw, 5.5rem); color: #e8dfd0;">
+            <h1 class="font-display font-light leading-none mb-8"
+                style="font-size: clamp(3rem, 6vw, 5.5rem); color: #e8dfd0;">
                 Art that lives<br>
                 <em>with you</em>
             </h1>
 
-            <div style="width: 40px; height: 1px; background: #C0622A; margin-bottom: 2rem;"></div>
+            <div class="ember-line-lg"></div>
 
-            <p class="mb-10 leading-relaxed" style="font-family: 'Josefin Sans', sans-serif; font-size: 0.85rem; color: #8a8278; letter-spacing: 0.05em; max-width: 380px;">
-                Discover original works from independent artists. Every piece is one of a kind — painted, drawn, and made by hand.
+            <p class="mb-10 leading-relaxed"
+               style="font-size: 0.85rem; color: #8a8278; letter-spacing: 0.05em; max-width: 380px;">
+                Discover original works from independent artists. Every piece is one of a kind — painted, drawn, and
+                made by hand.
             </p>
 
             <div class="flex items-center gap-6 flex-wrap">
                 <a href="/gallery/" class="px-8 py-3 text-xs uppercase tracking-widest transition-all duration-300"
-                   style="background: #C0622A; color: #1a1714; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em;">
+                   style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;">
                     Browse Gallery
                 </a>
                 <a href="/about/" class="text-xs uppercase tracking-widest transition-colors duration-300"
-                   style="color: #8a8278; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em; border-bottom: 1px solid #3a3530;">
+                   style="color: #8a8278; letter-spacing: 0.15em; border-bottom: 1px solid #3a3530;">
                     Our story
                 </a>
             </div>
@@ -45,19 +49,19 @@
             <div class="space-y-3">
                 <div style="background: #252119; border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05);">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork</span>
+                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork1</span>
                     </div>
                 </div>
                 <div style="background: #2e2a24; border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05);">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork</span>
+                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork2</span>
                     </div>
                 </div>
             </div>
             <div class="space-y-3 mt-8">
                 <div style="background: #2e2a24; border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05);">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork</span>
+                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork3</span>
                     </div>
                 </div>
                 <div style="background: #252119; border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05);">
@@ -73,25 +77,25 @@
     <!-- Scroll indicator -->
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" style="opacity: 0.4;">
         <div style="width: 1px; height: 40px; background: linear-gradient(to bottom, transparent, #8a8278);"></div>
-        <span style="font-family: 'Josefin Sans', sans-serif; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #8a8278;">scroll</span>
+        <span style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: #8a8278;">scroll</span>
     </div>
 
 </section>
 
 <!-- Stats bar -->
 <div style="background: #141210; border-top: 0.5px solid rgba(255,255,255,0.05); border-bottom: 0.5px solid rgba(255,255,255,0.05);">
-    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-6 grid grid-cols-3 divide-x" style="divide-color: rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-6 grid grid-cols-3 divide-x">
         <div class="text-center px-4">
             <p class="font-display font-light text-2xl" style="color: #e8dfd0;">100+</p>
-            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Original works</p>
+            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278;">Original works</p>
         </div>
         <div class="text-center px-4">
             <p class="font-display font-light text-2xl" style="color: #e8dfd0;">24</p>
-            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Artists</p>
+            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278;">Artists</p>
         </div>
         <div class="text-center px-4">
             <p class="font-display font-light text-2xl" style="color: #e8dfd0;">1 of 1</p>
-            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Every piece</p>
+            <p class="text-xs uppercase tracking-widest mt-1" style="color: #8a8278;">Every piece</p>
         </div>
     </div>
 </div>
@@ -103,11 +107,13 @@
         <!-- Section header -->
         <div class="flex items-end justify-between mb-14">
             <div>
-                <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif;">The makers</p>
-                <h2 class="font-display font-light" style="font-size: clamp(2rem, 4vw, 3rem); color: #e8dfd0;">Featured Artists</h2>
+                <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">The makers</p>
+                <h2 class="font-display font-light" style="font-size: clamp(2rem, 4vw, 3rem); color: #e8dfd0;">
+                    Featured Artists
+                </h2>
             </div>
             <a href="/gallery/" class="hidden md:block text-xs uppercase tracking-widest pb-1"
-               style="color: #8a8278; font-family: 'Josefin Sans', sans-serif; border-bottom: 1px solid #3a3530; transition: color 0.3s;">
+               style="color: #8a8278; border-bottom: 1px solid #3a3530; transition: color 0.3s;">
                 View all
             </a>
         </div>
@@ -120,88 +126,104 @@
             {% for artist in featured_artists %}
             {% endcomment %}
 
-            <!-- Placeholder artist card 1 -->
-            <div class="group cursor-pointer" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <!-- Artist portrait placeholder -->
-                <div style="aspect-ratio: 4/3; background: #252119; position: relative; overflow: hidden;">
+            <!-- Artist card 1 - Heather -->
+            <div class="group cursor-pointer"
+                 style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
+                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <div style="width: 60px; height: 60px; border-radius: 50%; background: #2e2a24; border: 1px solid #3a3530;"></div>
+                        <img src="{% static 'images/artists/heather_profile.jpg' %}"
+                             alt="Heather Whittlesey"
+                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
                     </div>
-                    <!-- Hover overlay -->
-                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;" class="group-hover:opacity-100"></div>
+                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
+                         class="group-hover:opacity-100"></div>
                 </div>
                 <div class="p-5">
-                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;"><em>Artist Name</em></p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Medium · Location</p>
-                    <div style="width: 24px; height: 1px; background: #C0622A; margin-bottom: 12px;"></div>
-                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">
-                        A short bio about the artist and their work goes here.
+                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
+                        <em>Heather Whittlesey</em>
                     </p>
-                    <a href="#" class="text-xs uppercase tracking-widest" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em;">
-                        View shop →
-                    </a>
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Ceramics · Midwest</p>
+                    <div class="ember-line"></div>
+                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
+                        Heather Whittlesey is a mixed media artist that works with sculpture, paper, clay and glass.
+                    </p>
+                    <a href="#" class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
                 </div>
             </div>
 
-            <!-- Placeholder artist card 2 -->
-            <div class="group cursor-pointer" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <div style="aspect-ratio: 4/3; background: #2e2a24; position: relative; overflow: hidden;">
+            <!-- Artist card 2 - Alexis -->
+            <div class="group cursor-pointer"
+                 style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
+                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <div style="width: 60px; height: 60px; border-radius: 50%; background: #3a3530; border: 1px solid #4a4540;"></div>
+                        <img src="{% static 'images/artists/alexis_profile.jpg' %}"
+                             alt="Alexis Dwyer"
+                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
                     </div>
-                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;" class="group-hover:opacity-100"></div>
+                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
+                         class="group-hover:opacity-100"></div>
                 </div>
                 <div class="p-5">
-                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;"><em>Artist Name</em></p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Medium · Location</p>
-                    <div style="width: 24px; height: 1px; background: #C0622A; margin-bottom: 12px;"></div>
-                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">
-                        A short bio about the artist and their work goes here.
+                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
+                        <em>Alexis Dwyer</em>
                     </p>
-                    <a href="#" class="text-xs uppercase tracking-widest" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em;">
-                        View shop →
-                    </a>
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Prints · Midwest</p>
+                    <div class="ember-line"></div>
+                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
+                        Alexis is a printmaker and painter and art teacher.
+                    </p>
+                    <a href="#" class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
                 </div>
             </div>
 
-            <!-- Placeholder artist card 3 -->
-            <div class="group cursor-pointer" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <div style="aspect-ratio: 4/3; background: #252119; position: relative; overflow: hidden;">
+            <!-- Artist card 3 - Rachel -->
+            <div class="group cursor-pointer"
+                 style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
+                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <div style="width: 60px; height: 60px; border-radius: 50%; background: #2e2a24; border: 1px solid #3a3530;"></div>
+                        <img src="{% static 'images/artists/rachel_profile.jpg' %}"
+                             alt="Rachel Buse"
+                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
                     </div>
-                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;" class="group-hover:opacity-100"></div>
+                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
+                         class="group-hover:opacity-100"></div>
                 </div>
                 <div class="p-5">
-                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;"><em>Artist Name</em></p>
-                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">Medium · Location</p>
-                    <div style="width: 24px; height: 1px; background: #C0622A; margin-bottom: 12px;"></div>
-                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">
-                        A short bio about the artist and their work goes here.
+                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
+                        <em>Rachel Buse</em>
                     </p>
-                    <a href="#" class="text-xs uppercase tracking-widest" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em;">
-                        View shop →
-                    </a>
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">Community Art · Midwest</p>
+                    <div class="ember-line"></div>
+                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
+                        Rachel is a community based artist that activates neighborhood participation. She specializes
+                        in group installation and drawing.
+                    </p>
+                    <a href="#" class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">View shop →</a>
                 </div>
             </div>
 
         </div>
-
     </div>
 </section>
 
 <!-- CTA Banner -->
 <section style="background: #141210; border-top: 0.5px solid rgba(255,255,255,0.05);">
     <div class="max-w-6xl mx-auto px-6 lg:px-10 py-20 text-center">
-        <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A; font-family: 'Josefin Sans', sans-serif;">Are you an artist?</p>
-        <h2 class="font-display font-light mb-6" style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #e8dfd0;">
+        <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">Are you an artist?</p>
+        <h2 class="font-display font-light mb-6"
+            style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #e8dfd0;">
             Sell your work on<br><em>Feather & Fire</em>
         </h2>
-        <p class="text-xs leading-relaxed mb-10 mx-auto" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif; max-width: 400px; letter-spacing: 0.05em;">
+        <p class="text-xs leading-relaxed mb-10 mx-auto"
+           style="color: #8a8278; max-width: 400px; letter-spacing: 0.05em;">
             Join our community of independent artists. Set your own prices, keep what you earn.
         </p>
-        <a href="/accounts/signup/" class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
-           style="border: 1px solid #C0622A; color: #C0622A; font-family: 'Josefin Sans', sans-serif; letter-spacing: 0.15em;">
+        <a href="/accounts/signup/"
+           class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+           style="border: 1px solid #C0622A; color: #C0622A; letter-spacing: 0.15em;">
             Apply to sell
         </a>
     </div>
