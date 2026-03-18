@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About — Feather & Fire{% endblock %}
+{% block content %}
+
+<!-- Page header -->
+<section class="pt-20 pb-12" style="background: #1a1714; border-bottom: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Our story</p>
+        <h1 class="font-display font-light" style="font-size: clamp(2.5rem, 5vw, 4rem); color: #e8dfd0;">
+            About Feather & Fire
+        </h1>
+    </div>
+</section>
+
+<!-- Origin story -->
+<section class="py-24" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+
+        <div>
+            <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">How it began</p>
+            <h2 class="font-display font-light mb-6" style="font-size: clamp(1.8rem, 3vw, 2.8rem); color: #e8dfd0;">
+                <em>A place for original work</em>
+            </h2>
+            <div class="ember-line-lg"></div>
+            <div class="space-y-4 text-xs leading-relaxed" style="color: #8a8278; letter-spacing: 0.04em;">
+                <p>
+                    Your story goes here. Tell visitors why Feather & Fire exists and what makes it different.
+                </p>
+                <p>
+                    A second paragraph about the early days, the inspiration, or the problem you set out to solve.
+                </p>
+                <p>
+                    A third paragraph about what this community means to you.
+                </p>
+            </div>
+        </div>
+
+        <!-- Decorative side -->
+        <div class="hidden lg:block">
+            <div style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; aspect-ratio: 4/5; background: #141210; display: flex; align-items: center; justify-content: center;">
+                <span class="font-display font-light" style="font-style: italic; font-size: 1rem; color: #3a3530;">
+                    photo or artwork here
+                </span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Mission -->
+<section class="py-24" style="background: #141210; border-top: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 text-center">
+        <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">What we believe</p>
+        <h2 class="font-display font-light mb-6" style="font-size: clamp(1.8rem, 3.5vw, 3rem); color: #e8dfd0;">
+            <em>Art should live with people,<br>not in storage.</em>
+        </h2>
+        <div class="ember-line mx-auto" style="margin: 0 auto 2rem;"></div>
+        <p class="text-xs leading-relaxed mx-auto" style="color: #8a8278; max-width: 520px; letter-spacing: 0.05em;">
+            Your mission statement goes here. A sentence or two about what Feather & Fire stands for and why independent artists matter.
+        </p>
+    </div>
+</section>
+
+<!-- How it works -->
+<section class="py-24" style="background: #1a1714; border-top: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <div class="text-center mb-16">
+            <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">The process</p>
+            <h2 class="font-display font-light" style="font-size: clamp(1.8rem, 3vw, 2.5rem); color: #e8dfd0;">
+                How it works
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+            <div>
+                <p class="font-display font-light text-4xl mb-4" style="color: #C0622A;"><em>01</em></p>
+                <div class="ember-line"></div>
+                <p class="text-xs uppercase tracking-widest mb-3" style="color: #e8dfd0;">Discover</p>
+                <p class="text-xs leading-relaxed" style="color: #8a8278;">
+                    Browse original works from independent artists. Every piece is one of a kind.
+                </p>
+            </div>
+
+            <div>
+                <p class="font-display font-light text-4xl mb-4" style="color: #C0622A;"><em>02</em></p>
+                <div class="ember-line"></div>
+                <p class="text-xs uppercase tracking-widest mb-3" style="color: #e8dfd0;">Connect</p>
+                <p class="text-xs leading-relaxed" style="color: #8a8278;">
+                    Learn about the artist behind each piece and the story that inspired it.
+                </p>
+            </div>
+
+            <div>
+                <p class="font-display font-light text-4xl mb-4" style="color: #C0622A;"><em>03</em></p>
+                <div class="ember-line"></div>
+                <p class="text-xs uppercase tracking-widest mb-3" style="color: #e8dfd0;">Collect</p>
+                <p class="text-xs leading-relaxed" style="color: #8a8278;">
+                    Own something real. Your purchase goes directly to the artist.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section style="background: #141210; border-top: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10 py-20 text-center">
+        <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">Ready to explore?</p>
+        <h2 class="font-display font-light mb-8"
+            style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: #e8dfd0;">
+            <em>See what's available</em>
+        </h2>
+        <a href="/gallery/"
+           class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+           style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;">
+            Browse Gallery
+        </a>
+    </div>
+</section>
+
+{% endblock %}

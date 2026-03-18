@@ -16,6 +16,10 @@ def home(request):
     return render(request, 'home.html', context)
 
 
+def about(request):
+    return render(request, 'about.html')
+
+
 def gallery(request):
     artworks = Artwork.objects.select_related('artist__artist_profile').filter(is_sold=False)
 
