@@ -3,7 +3,7 @@ Pillow==11.3.0
 Django==4.2.29
 django-allauth==65.14.3
 django-extensions==4.1
-gunicorn==25.1.0
+gunicorn==23.0.0
 MarkupSafe==3.0.3
 packaging==26.0
 python-dotenv==1.2.2
