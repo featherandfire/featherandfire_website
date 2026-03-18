@@ -44,33 +44,50 @@
             </div>
         </div>
 
-        <!-- Right: Art grid placeholder -->
+        <!-- Right: Art grid -->
+        {% if hero_artworks %}
         <div class="hidden lg:grid grid-cols-2 gap-3">
             <div class="space-y-3">
-                <div style="background: #252119; border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05);">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork1</span>
-                    </div>
+                <div class="hero-slot" data-slot="0" style="border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05); overflow: hidden; background: #252119; position: relative;">
+                    <img style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease;">
                 </div>
-                <div style="background: #2e2a24; border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05);">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork2</span>
-                    </div>
+                <div class="hero-slot" data-slot="1" style="border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05); overflow: hidden; background: #2e2a24; position: relative;">
+                    <img style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease;">
                 </div>
             </div>
             <div class="space-y-3 mt-8">
-                <div style="background: #2e2a24; border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05);">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork3</span>
-                    </div>
+                <div class="hero-slot" data-slot="2" style="border-radius: 4px; aspect-ratio: 4/3; border: 0.5px solid rgba(255,255,255,0.05); overflow: hidden; background: #2e2a24; position: relative;">
+                    <img style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease;">
                 </div>
-                <div style="background: #252119; border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05);">
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 0.75rem; color: #3a3530;">artwork</span>
-                    </div>
+                <div class="hero-slot" data-slot="3" style="border-radius: 4px; aspect-ratio: 3/4; border: 0.5px solid rgba(255,255,255,0.05); overflow: hidden; background: #252119; position: relative;">
+                    <img style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.6s ease;">
                 </div>
             </div>
         </div>
+
+        {{ hero_artwork_urls|json_script:"hero-artwork-data" }}
+        <script>
+            const heroImages = JSON.parse(document.getElementById('hero-artwork-data').textContent);
+
+            const slots = document.querySelectorAll('.hero-slot img');
+            let offset = 0;
+
+            function loadImages() {
+                slots.forEach((img, i) => {
+                    const src = heroImages[(offset + i) % heroImages.length];
+                    img.style.opacity = 0;
+                    setTimeout(() => {
+                        img.src = src;
+                        img.onload = () => img.style.opacity = 1;
+                    }, i * 150);
+                });
+                offset = (offset + 4) % heroImages.length;
+            }
+
+            loadImages();
+            setInterval(loadImages, 3000);
+        </script>
+        {% endif %}
 
     </div>
 
