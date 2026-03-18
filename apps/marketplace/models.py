@@ -11,6 +11,7 @@ class Artwork(models.Model):
         ('sculpture', 'Sculpture'),
         ('photography', 'Photography'),
         ('mixed_media', 'Mixed Media'),
+        ('glass', 'Glass'),
         ('other', 'Other'),
     ]
 
