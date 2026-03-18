@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Artwork
 from .forms import SellerApplicationForm
@@ -36,6 +36,24 @@ def apply(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def artwork_detail(request, pk):
+    artwork = get_object_or_404(Artwork, pk=pk)
+    artist_profile = getattr(artwork.artist, 'artist_profile', None)
+    return render(request, 'artwork_detail.html', {
+        'artwork': artwork,
+        'artist_profile': artist_profile,
+    })
+
+
+def artist_shop(request, pk):
+    profile = get_object_or_404(ArtistProfile, pk=pk)
+    artworks = Artwork.objects.filter(artist=profile.user, is_sold=False)
+    return render(request, 'artist_shop.html', {
+        'profile': profile,
+        'artworks': artworks,
+    })
 
 
 def gallery(request):

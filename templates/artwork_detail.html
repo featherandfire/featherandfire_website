@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ artwork.title }} — Feather & Fire{% endblock %}
+{% block content %}
+
+<section class="py-24" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+
+            <!-- Image -->
+            <div style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210;">
+                <img src="{{ artwork.image.url }}"
+                     alt="{{ artwork.title }}"
+                     style="width: 100%; height: auto; display: block; object-fit: contain;">
+            </div>
+
+            <!-- Details -->
+            <div>
+                <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">
+                    {{ artwork.get_medium_display }}
+                </p>
+
+                <h1 class="font-display font-light mb-4" style="font-size: clamp(2rem, 4vw, 3.5rem); color: #e8dfd0;">
+                    <em>{{ artwork.title }}</em>
+                </h1>
+
+                <div class="ember-line-lg"></div>
+
+                <p class="font-display font-light text-3xl mb-8" style="color: #C0622A;">
+                    ${{ artwork.price }}
+                </p>
+
+                {% if artwork.description %}
+                <p class="text-xs leading-relaxed mb-10" style="color: #8a8278; letter-spacing: 0.05em;">
+                    {{ artwork.description }}
+                </p>
+                {% endif %}
+
+                {% if artwork.is_sold %}
+                <p class="text-xs uppercase tracking-widest px-8 py-3 inline-block mb-10"
+                   style="border: 1px solid #3a3530; color: #3a3530; letter-spacing: 0.15em;">
+                    Sold
+                </p>
+                {% else %}
+                <a href="#inquire"
+                   class="inline-block px-10 py-3 text-xs uppercase tracking-widest mb-10 transition-all duration-300"
+                   style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;">
+                    Inquire to Purchase
+                </a>
+                {% endif %}
+
+                <!-- Artist -->
+                {% if artist_profile %}
+                <div style="border-top: 0.5px solid rgba(255,255,255,0.05); padding-top: 2rem;">
+                    <p class="text-xs uppercase tracking-widest mb-3" style="color: #8a8278;">About the artist</p>
+                    <div class="flex items-center gap-4 mb-3">
+                        {% if artist_profile.profile_photo %}
+                        <img src="{{ artist_profile.profile_photo.url }}"
+                             alt="{{ artist_profile.display_name }}"
+                             style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 0.5px solid rgba(255,255,255,0.1);">
+                        {% endif %}
+                        <div>
+                            <p class="font-display font-light text-lg" style="color: #e8dfd0;">
+                                <em>{{ artist_profile.display_name }}</em>
+                            </p>
+                            <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">
+                                {{ artist_profile.medium }}{% if artist_profile.location %} · {{ artist_profile.location }}{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% if artist_profile.bio %}
+                    <p class="text-xs leading-relaxed mb-4" style="color: #8a8278;">
+                        {{ artist_profile.bio|truncatechars:200 }}
+                    </p>
+                    {% endif %}
+                    <a href="{% url 'artist_shop' artist_profile.pk %}"
+                       class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">
+                        View all works →
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <!-- Inquire section -->
+        {% if not artwork.is_sold %}
+        <div id="inquire" class="mt-24 max-w-2xl">
+            <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Interested?</p>
+            <h2 class="font-display font-light mb-6" style="font-size: clamp(1.5rem, 3vw, 2.5rem); color: #e8dfd0;">
+                <em>Get in touch</em>
+            </h2>
+            <div class="ember-line-lg"></div>
+            <p class="text-xs leading-relaxed mb-8" style="color: #8a8278;">
+                Send us a message and we'll connect you directly with the artist.
+            </p>
+            <a href="{% url 'apply' %}?inquiry={{ artwork.pk }}"
+               class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+               style="border: 1px solid #C0622A; color: #C0622A; letter-spacing: 0.15em;">
+                Send Inquiry
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}
