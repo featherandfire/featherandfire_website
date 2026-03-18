@@ -41,7 +41,8 @@
             <div class="group" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210;">
 
                 <!-- Image -->
-                <div style="aspect-ratio: 4/3; overflow: hidden; background: #252119; position: relative;">
+                <div style="aspect-ratio: 4/3; overflow: hidden; background: #252119; position: relative; cursor: zoom-in;"
+                     onclick="openLightbox('{{ artwork.image.url }}', '{{ artwork.title|escapejs }}', '{{ artwork.get_medium_display|escapejs }}', '{% with profile=artwork.artist.artist_profile %}{% if profile %}{{ profile.display_name|escapejs }}{% endif %}{% endwith %}', '{{ artwork.price }}')">
                     <img src="{{ artwork.image.url }}"
                          alt="{{ artwork.title }}"
                          style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
@@ -95,4 +96,63 @@
     </div>
 </section>
 
+<!-- Lightbox -->
+<div id="lightbox"
+     onclick="closeLightbox(event)"
+     style="display: none; position: fixed; inset: 0; z-index: 100; background: rgba(20,18,16,0.95); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 2rem;">
+
+    <button onclick="closeLightbox()"
+            style="position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: #8a8278; font-size: 1.5rem; cursor: pointer; line-height: 1;">
+        ✕
+    </button>
+
+    <div style="display: flex; gap: 3rem; align-items: center; max-width: 1100px; width: 100%; max-height: 90vh;">
+
+        <!-- Image -->
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; max-height: 85vh;">
+            <img id="lightbox-img"
+                 src=""
+                 alt=""
+                 style="max-width: 100%; max-height: 85vh; object-fit: contain; border: 0.5px solid rgba(255,255,255,0.05);">
+        </div>
+
+        <!-- Details -->
+        <div style="width: 240px; shrink: 0;">
+            <p id="lightbox-title" class="font-display font-light mb-2" style="font-size: 1.6rem; color: #e8dfd0;"></p>
+            <div class="ember-line"></div>
+            <p id="lightbox-meta" class="text-xs uppercase tracking-widest mb-4" style="color: #8a8278;"></p>
+            <p id="lightbox-price" class="font-display text-2xl" style="color: #C0622A;"></p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const lightbox = document.getElementById('lightbox');
+
+    function openLightbox(url, title, medium, artist, price) {
+        document.getElementById('lightbox-img').src = url;
+        document.getElementById('lightbox-title').innerHTML = '<em>' + title + '</em>';
+        document.getElementById('lightbox-meta').textContent = medium + (artist ? ' · ' + artist : '');
+        document.getElementById('lightbox-price').textContent = '$' + price;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(event) {
+        if (event && event.target !== lightbox) return;
+        lightbox.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+    });
+</script>
 {% endblock %}
