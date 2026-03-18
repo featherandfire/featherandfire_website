@@ -12,7 +12,6 @@ class Artwork(models.Model):
         ('photography', 'Photography'),
         ('mixed_media', 'Mixed Media'),
         ('glass', 'Glass'),
-        ('other', 'Other'),
     ]
 
     artist = models.ForeignKey(
