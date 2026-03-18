@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Artwork
+from .forms import SellerApplicationForm
 from apps.users.models import ArtistProfile
 
 
@@ -18,6 +20,18 @@ def home(request):
         'hero_artwork_urls': hero_artwork_urls,
     }
     return render(request, 'home.html', context)
+
+
+def apply(request):
+    if request.method == 'POST':
+        form = SellerApplicationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your application has been submitted. We\'ll be in touch soon.')
+            return redirect('apply')
+    else:
+        form = SellerApplicationForm()
+    return render(request, 'apply.html', {'form': form})
 
 
 def about(request):

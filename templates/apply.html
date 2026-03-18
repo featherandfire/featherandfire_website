@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Apply to Sell — Feather & Fire{% endblock %}
+{% block content %}
+
+<!-- Page header -->
+<section class="pt-20 pb-12" style="background: #1a1714; border-bottom: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Are you an artist?</p>
+        <h1 class="font-display font-light" style="font-size: clamp(2.5rem, 5vw, 4rem); color: #e8dfd0;">
+            Apply to Sell
+        </h1>
+    </div>
+</section>
+
+<!-- Form -->
+<section class="py-24" style="background: #1a1714;">
+    <div class="max-w-2xl mx-auto px-6 lg:px-10">
+
+        <p class="text-xs leading-relaxed mb-12" style="color: #8a8278; letter-spacing: 0.05em;">
+            Tell us about yourself and your work. We review every application personally and will follow up by email.
+        </p>
+
+        <form method="post" class="space-y-8">
+            {% csrf_token %}
+
+            <!-- Name -->
+            <div>
+                <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278;">Name</label>
+                <input type="text" name="name" value="{{ form.name.value|default:'' }}" required
+                       style="width: 100%; background: #141210; border: 0.5px solid #3a3530; border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none;"
+                       onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='#3a3530'">
+                {% if form.name.errors %}
+                <p class="text-xs mt-1" style="color: #C0622A;">{{ form.name.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278;">Email</label>
+                <input type="email" name="email" value="{{ form.email.value|default:'' }}" required
+                       style="width: 100%; background: #141210; border: 0.5px solid #3a3530; border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none;"
+                       onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='#3a3530'">
+                {% if form.email.errors %}
+                <p class="text-xs mt-1" style="color: #C0622A;">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Portfolio URL -->
+            <div>
+                <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278;">
+                    Portfolio or Website <span style="color: #3a3530;">(optional)</span>
+                </label>
+                <input type="url" name="portfolio_url" value="{{ form.portfolio_url.value|default:'' }}"
+                       placeholder="https://"
+                       style="width: 100%; background: #141210; border: 0.5px solid #3a3530; border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none;"
+                       onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='#3a3530'">
+                {% if form.portfolio_url.errors %}
+                <p class="text-xs mt-1" style="color: #C0622A;">{{ form.portfolio_url.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Message -->
+            <div>
+                <label class="block text-xs uppercase tracking-widest mb-2" style="color: #8a8278;">Tell us about your work</label>
+                <textarea name="message" rows="6" required
+                          style="width: 100%; background: #141210; border: 0.5px solid #3a3530; border-radius: 2px; padding: 0.75rem 1rem; color: #e8dfd0; font-family: 'Josefin Sans', sans-serif; font-size: 0.8rem; outline: none; resize: vertical;"
+                          onfocus="this.style.borderColor='#C0622A'" onblur="this.style.borderColor='#3a3530'">{{ form.message.value|default:'' }}</textarea>
+                {% if form.message.errors %}
+                <p class="text-xs mt-1" style="color: #C0622A;">{{ form.message.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit"
+                    class="px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+                    style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em; border: none; cursor: pointer;">
+                Submit Application
+            </button>
+
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

@@ -33,3 +33,18 @@ class Artwork(models.Model):
 
     def __str__(self):
         return f'{self.title} — {self.artist}'
+
+
+class SellerApplication(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    portfolio_url = models.URLField(blank=True)
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    reviewed = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-submitted_at']
+
+    def __str__(self):
+        return f'{self.name} — {self.email}'
