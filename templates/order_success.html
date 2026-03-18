@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — Feather & Fire{% endblock %}
+{% block content %}
+
+<section class="py-32" style="background: #1a1714;">
+    <div class="max-w-2xl mx-auto px-6 lg:px-10 text-center">
+
+        <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">Thank you</p>
+
+        <h1 class="font-display font-light mb-6" style="font-size: clamp(2rem, 4vw, 3.5rem); color: #e8dfd0;">
+            <em>Your order is confirmed</em>
+        </h1>
+
+        <div class="ember-line mx-auto" style="margin: 0 auto 2rem;"></div>
+
+        {% if order %}
+        <p class="text-xs leading-relaxed mb-4" style="color: #8a8278; letter-spacing: 0.05em;">
+            You purchased <span style="color: #e8dfd0;">{{ order.artwork.title }}</span>.
+        </p>
+        {% if order.buyer_email %}
+        <p class="text-xs leading-relaxed mb-10" style="color: #8a8278;">
+            A confirmation has been sent to {{ order.buyer_email }}.
+        </p>
+        {% endif %}
+        {% else %}
+        <p class="text-xs leading-relaxed mb-10" style="color: #8a8278; letter-spacing: 0.05em;">
+            Your purchase was successful. You'll receive a confirmation email shortly.
+        </p>
+        {% endif %}
+
+        <a href="{% url 'gallery' %}"
+           class="inline-block px-10 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+           style="border: 1px solid #C0622A; color: #C0622A; letter-spacing: 0.15em;">
+            Continue Browsing
+        </a>
+
+    </div>
+</section>
+
+{% endblock %}

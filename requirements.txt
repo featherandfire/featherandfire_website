@@ -6,3 +6,4 @@ Pillow>=9.0
 python-dotenv>=1.0
 sqlparse>=0.4
 asgiref>=3.6
+stripe>=7.0

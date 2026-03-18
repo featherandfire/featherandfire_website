@@ -1,8 +1,14 @@
+import stripe
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Artwork
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Artwork, Order
 from .forms import SellerApplicationForm
 from apps.users.models import ArtistProfile
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def home(request):
@@ -36,6 +42,72 @@ def apply(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+def checkout(request, pk):
+    artwork = get_object_or_404(Artwork, pk=pk, is_sold=False)
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price_data': {
+                'currency': 'usd',
+                'unit_amount': int(artwork.price * 100),
+                'product_data': {
+                    'name': artwork.title,
+                    'description': artwork.description[:255] if artwork.description else '',
+                },
+            },
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(f'/order/success/?session_id={{CHECKOUT_SESSION_ID}}'),
+        cancel_url=request.build_absolute_uri(f'/artwork/{pk}/'),
+        metadata={'artwork_id': pk},
+    )
+    Order.objects.create(
+        artwork=artwork,
+        buyer_email='',
+        stripe_session_id=session.id,
+        amount=artwork.price,
+    )
+    return redirect(session.url, permanent=False)
+
+
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+    except (ValueError, stripe.error.SignatureVerificationError):
+        return HttpResponse(status=400)
+
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        try:
+            order = Order.objects.get(stripe_session_id=session['id'])
+            order.paid = True
+            order.buyer_email = session.get('customer_details', {}).get('email', '')
+            order.save()
+            order.artwork.is_sold = True
+            order.artwork.save()
+        except Order.DoesNotExist:
+            pass
+
+    return HttpResponse(status=200)
+
+
+def order_success(request):
+    session_id = request.GET.get('session_id')
+    order = None
+    if session_id:
+        try:
+            order = Order.objects.get(stripe_session_id=session_id)
+        except Order.DoesNotExist:
+            pass
+    return render(request, 'order_success.html', {'order': order})
 
 
 def artwork_detail(request, pk):

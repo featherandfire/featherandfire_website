@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Artwork, SellerApplication
+from .models import Artwork, SellerApplication, Order
 
 
 @admin.register(Artwork)
@@ -16,3 +16,10 @@ class SellerApplicationAdmin(admin.ModelAdmin):
     list_filter = ('reviewed',)
     list_editable = ('reviewed',)
     search_fields = ('name', 'email')
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'artwork', 'buyer_email', 'amount', 'paid', 'created_at')
+    list_filter = ('paid',)
+    search_fields = ('buyer_email', 'artwork__title', 'stripe_session_id')

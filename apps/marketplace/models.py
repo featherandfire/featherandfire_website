@@ -48,3 +48,15 @@ class SellerApplication(models.Model):
 
     def __str__(self):
         return f'{self.name} — {self.email}'
+
+
+class Order(models.Model):
+    artwork = models.ForeignKey(Artwork, on_delete=models.PROTECT, related_name='orders')
+    buyer_email = models.EmailField()
+    stripe_session_id = models.CharField(max_length=200, unique=True)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Order {self.pk} — {self.artwork.title}'
