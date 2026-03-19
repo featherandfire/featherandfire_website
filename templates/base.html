@@ -44,7 +44,7 @@
                 Feather & Fire
             </a>
 
-            <!-- Nav links -->
+            <!-- Nav links (desktop) -->
             <div class="hidden md:flex items-center gap-8">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/gallery/" class="nav-link">Gallery</a>
@@ -52,8 +52,8 @@
                 <a href="/about/" class="nav-link">About</a>
             </div>
 
-            <!-- Auth -->
-            <div class="flex items-center gap-6">
+            <!-- Auth (desktop) -->
+            <div class="hidden md:flex items-center gap-6">
                 {% if user.is_authenticated %}
                     <span class="nav-link" style="color: #8a8278; cursor: default;">{{ user.email }}</span>
                     <a href="{% url 'account_logout' %}" class="nav-link">Logout</a>
@@ -64,8 +64,43 @@
                     </a>
                 {% endif %}
             </div>
+
+            <!-- Hamburger (mobile) -->
+            <button id="mobile-menu-btn" class="md:hidden flex flex-col gap-1.5 p-2" onclick="toggleMobileMenu()" style="background: none; border: none; cursor: pointer;">
+                <span class="hamburger-line" style="display: block; width: 22px; height: 1px; background: #8a8278; transition: all 0.3s;"></span>
+                <span class="hamburger-line" style="display: block; width: 22px; height: 1px; background: #8a8278; transition: all 0.3s;"></span>
+                <span class="hamburger-line" style="display: block; width: 22px; height: 1px; background: #8a8278; transition: all 0.3s;"></span>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" style="display: none; border-top: 0.5px solid rgba(255,255,255,0.05);">
+            <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col gap-5">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/gallery/" class="nav-link">Gallery</a>
+                <a href="/artists/" class="nav-link">Artists</a>
+                <a href="/about/" class="nav-link">About</a>
+                <div style="border-top: 0.5px solid rgba(255,255,255,0.05); padding-top: 1.25rem;" class="flex flex-col gap-4">
+                    {% if user.is_authenticated %}
+                        <span class="nav-link" style="color: #8a8278;">{{ user.email }}</span>
+                        <a href="{% url 'account_logout' %}" class="nav-link">Logout</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}" class="nav-link">Login</a>
+                        <a href="{% url 'account_signup' %}" class="text-xs uppercase tracking-widest px-4 py-2 border border-ember text-ember inline-block" style="font-family: 'Josefin Sans', sans-serif;">
+                            Join
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </nav>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
 
     <!-- Messages -->
     {% if messages %}
