@@ -42,7 +42,7 @@
 
                 <!-- Image -->
                 <div style="aspect-ratio: 4/3; overflow: hidden; background: #252119; position: relative; cursor: zoom-in;"
-                     onclick="openLightbox('{{ artwork.image.url }}', '{{ artwork.title|escapejs }}', '{{ artwork.get_medium_display|escapejs }}', '{% with profile=artwork.artist.artist_profile %}{% if profile %}{{ profile.display_name|escapejs }}{% endif %}{% endwith %}', '{{ artwork.price }}')">
+                     onclick="openLightbox('{{ artwork.image.url }}', '{{ artwork.title|escapejs }}', '{{ artwork.get_medium_display|escapejs }}', '{% with profile=artwork.artist.artist_profile %}{% if profile %}{{ profile.display_name|escapejs }}{% endif %}{% endwith %}', '{{ artwork.price }}', '{{ artwork.description|escapejs }}', '{% if not artwork.is_sold %}{% url "checkout" artwork.pk %}{% endif %}')">
                     <img src="{{ artwork.image.url }}"
                          alt="{{ artwork.title }}"
                          style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
@@ -123,11 +123,21 @@
         </div>
 
         <!-- Details -->
-        <div style="width: 240px; shrink: 0;">
+        <div style="width: 260px; flex-shrink: 0;">
             <p id="lightbox-title" class="font-display font-light mb-2" style="font-size: 1.6rem; color: #e8dfd0;"></p>
             <div class="ember-line"></div>
             <p id="lightbox-meta" class="text-xs uppercase tracking-widest mb-4" style="color: #8a8278;"></p>
-            <p id="lightbox-price" class="font-display text-2xl" style="color: #C0622A;"></p>
+            <p id="lightbox-price" class="font-display text-2xl mb-4" style="color: #C0622A;"></p>
+            <p id="lightbox-description" class="text-xs leading-relaxed mb-6" style="color: #8a8278;"></p>
+            <a id="lightbox-buy" href="#"
+               class="inline-block px-8 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+               style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;">
+                Buy Now
+            </a>
+            <p id="lightbox-sold" class="text-xs uppercase tracking-widest px-8 py-3 inline-block"
+               style="display: none !important; border: 1px solid #3a3530; color: #3a3530; letter-spacing: 0.15em;">
+                Sold
+            </p>
         </div>
 
     </div>
@@ -139,11 +149,24 @@
 <script>
     const lightbox = document.getElementById('lightbox');
 
-    function openLightbox(url, title, medium, artist, price) {
+    function openLightbox(url, title, medium, artist, price, description, checkoutUrl) {
         document.getElementById('lightbox-img').src = url;
         document.getElementById('lightbox-title').innerHTML = '<em>' + title + '</em>';
         document.getElementById('lightbox-meta').textContent = medium + (artist ? ' · ' + artist : '');
         document.getElementById('lightbox-price').textContent = '$' + price;
+        document.getElementById('lightbox-description').textContent = description;
+
+        const buyBtn = document.getElementById('lightbox-buy');
+        const soldTag = document.getElementById('lightbox-sold');
+        if (checkoutUrl) {
+            buyBtn.href = checkoutUrl;
+            buyBtn.style.display = 'inline-block';
+            soldTag.style.display = 'none';
+        } else {
+            buyBtn.style.display = 'none';
+            soldTag.style.display = 'inline-block';
+        }
+
         lightbox.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }

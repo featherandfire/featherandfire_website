@@ -141,15 +141,16 @@
             {% for profile in featured_artists %}
             <div class="group cursor-pointer"
                  style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210; transition: border-color 0.3s;">
-                <div style="aspect-ratio: 1/1; position: relative; overflow: hidden; background: #252119;">
-                    {% if profile.profile_photo %}
-                    <img src="{{ profile.profile_photo.url }}"
-                         alt="{{ profile.display_name }}"
-                         style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;"
-                         class="group-hover:scale-105">
-                    {% else %}
-                    <div style="width: 100%; height: 100%; background: #2e2a24;"></div>
-                    {% endif %}
+                <div style="aspect-ratio: 4/3; position: relative; overflow: hidden; background: #252119;">
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        {% if profile.profile_photo %}
+                        <img src="{{ profile.profile_photo.url }}"
+                             alt="{{ profile.display_name }}"
+                             style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
+                        {% else %}
+                        <div style="width: 120px; height: 120px; border-radius: 50%; background: #2e2a24; border: 1px solid rgba(255,255,255,0.1);"></div>
+                        {% endif %}
+                    </div>
                     <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.08); opacity: 0; transition: opacity 0.3s;"
                          class="group-hover:opacity-100"></div>
                 </div>
