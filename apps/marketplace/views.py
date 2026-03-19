@@ -122,6 +122,11 @@ def artwork_detail(request, pk):
     })
 
 
+def artists(request):
+    profiles = ArtistProfile.objects.select_related('user').all()
+    return render(request, 'artists.html', {'profiles': profiles})
+
+
 def artist_shop(request, pk):
     profile = get_object_or_404(ArtistProfile, pk=pk)
     artworks = Artwork.objects.filter(artist=profile.user, is_sold=False)

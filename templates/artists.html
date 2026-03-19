@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Artists — Feather & Fire{% endblock %}
+{% block content %}
+
+<!-- Page header -->
+<section class="pt-20 pb-12" style="background: #1a1714; border-bottom: 0.5px solid rgba(255,255,255,0.05);">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+        <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">The makers</p>
+        <h1 class="font-display font-light" style="font-size: clamp(2.5rem, 5vw, 4rem); color: #e8dfd0;">
+            Our Artists
+        </h1>
+    </div>
+</section>
+
+<!-- Artist grid -->
+<section class="py-16" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+        {% if profiles %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for profile in profiles %}
+            <div class="group" style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210;">
+
+                <!-- Thumbnail -->
+                <div style="aspect-ratio: 4/3; background: #252119; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    {% if profile.profile_photo %}
+                    <img src="{{ profile.profile_photo.url }}"
+                         alt="{{ profile.display_name }}"
+                         style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.4s ease;"
+                         class="group-hover:scale-105">
+                    {% else %}
+                    <div style="width: 140px; height: 140px; border-radius: 50%; background: #2e2a24; border: 1px solid rgba(255,255,255,0.1);"></div>
+                    {% endif %}
+                    <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.06); opacity: 0; transition: opacity 0.3s;"
+                         class="group-hover:opacity-100"></div>
+                </div>
+
+                <!-- Info -->
+                <div class="p-6">
+                    <p class="font-display font-light text-xl mb-1" style="color: #e8dfd0;">
+                        <em>{{ profile.display_name }}</em>
+                    </p>
+                    <p class="text-xs uppercase tracking-widest mb-4" style="color: #C0622A;">
+                        {{ profile.medium }}{% if profile.location %} · {{ profile.location }}{% endif %}
+                    </p>
+                    <div class="ember-line"></div>
+                    {% if profile.bio %}
+                    <p class="text-xs leading-relaxed mb-5" style="color: #8a8278; letter-spacing: 0.04em;">
+                        {{ profile.bio }}
+                    </p>
+                    {% endif %}
+                    <a href="{% url 'artist_shop' profile.pk %}"
+                       class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">
+                        View shop →
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="text-center py-32">
+            <p class="font-display font-light text-3xl mb-4" style="color: #e8dfd0;"><em>No artists yet</em></p>
+            <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Check back soon.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}
