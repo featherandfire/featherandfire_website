@@ -47,8 +47,14 @@
                          alt="{{ artwork.title }}"
                          style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;"
                          class="group-hover:scale-105">
+                    {% if artwork.is_sold %}
+                    <div style="position: absolute; inset: 0; background: rgba(20,18,16,0.6); display: flex; align-items: center; justify-content: center;">
+                        <span class="text-xs uppercase tracking-widest px-4 py-2" style="border: 1px solid #8a8278; color: #8a8278; letter-spacing: 0.2em;">Sold</span>
+                    </div>
+                    {% else %}
                     <div style="position: absolute; inset: 0; background: rgba(192,98,42,0.06); opacity: 0; transition: opacity 0.3s;"
                          class="group-hover:opacity-100"></div>
+                    {% endif %}
                 </div>
 
                 <!-- Info -->

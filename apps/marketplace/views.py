@@ -129,7 +129,7 @@ def artists(request):
 
 def artist_shop(request, pk):
     profile = get_object_or_404(ArtistProfile, pk=pk)
-    artworks = Artwork.objects.filter(artist=profile.user, is_sold=False)
+    artworks = Artwork.objects.filter(artist=profile.user)
     return render(request, 'artist_shop.html', {
         'profile': profile,
         'artworks': artworks,
@@ -137,7 +137,7 @@ def artist_shop(request, pk):
 
 
 def gallery(request):
-    artworks = Artwork.objects.select_related('artist__artist_profile').filter(is_sold=False)
+    artworks = Artwork.objects.select_related('artist__artist_profile')
 
     medium = request.GET.get('medium')
     if medium:
