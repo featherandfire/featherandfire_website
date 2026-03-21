@@ -98,7 +98,8 @@ def stripe_webhook(request):
         if payment_status == 'paid' and artwork_id:
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
-                shipping = session.get('shipping_details') or session.get('shipping') or {}
+                full_session = stripe.checkout.Session.retrieve(session['id'])
+                shipping = full_session.get('shipping_details') or full_session.get('shipping') or {}
                 shipping_address_obj = shipping.get('address', {})
                 shipping_address = ', '.join(filter(None, [
                     shipping_address_obj.get('line1', ''),
