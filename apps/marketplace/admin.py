@@ -20,6 +20,7 @@ class SellerApplicationAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'artwork', 'buyer_email', 'amount', 'paid', 'created_at')
+    list_display = ('pk', 'artwork', 'buyer_email', 'shipping_name', 'amount', 'paid', 'created_at')
     list_filter = ('paid',)
-    search_fields = ('buyer_email', 'artwork__title', 'stripe_session_id')
+    search_fields = ('buyer_email', 'artwork__title', 'stripe_session_id', 'shipping_name')
+    readonly_fields = ('artwork', 'buyer_email', 'stripe_session_id', 'amount', 'paid', 'shipping_name', 'shipping_address', 'created_at')
