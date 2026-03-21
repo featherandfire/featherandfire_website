@@ -95,39 +95,38 @@ def stripe_webhook(request):
         artwork_id = session.get('metadata', {}).get('artwork_id')
         print(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
 
-        if payment_status == 'paid':
-            if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
-                try:
-                    artwork = Artwork.objects.get(pk=artwork_id)
-                    shipping = session.get('shipping_details') or session.get('shipping') or {}
-                    print(f'Shipping raw: {shipping}')
-                    shipping_address_obj = shipping.get('address', {})
-                    shipping_address = ', '.join(filter(None, [
-                        shipping_address_obj.get('line1', ''),
-                        shipping_address_obj.get('line2', ''),
-                        shipping_address_obj.get('city', ''),
-                        shipping_address_obj.get('state', ''),
-                        shipping_address_obj.get('postal_code', ''),
-                        shipping_address_obj.get('country', ''),
-                    ]))
-                    Order.objects.create(
-                        artwork=artwork,
-                        buyer_email=session.get('customer_details', {}).get('email', ''),
-                        stripe_session_id=session['id'],
-                        amount=artwork.price,
-                        paid=True,
-                        shipping_name=shipping.get('name', ''),
-                        shipping_address=shipping_address,
-                    )
-                    artwork.is_sold = True
-                    artwork.save()
-                    print(f'Artwork {artwork_id} marked as sold.')
-                except Artwork.DoesNotExist:
-                    print(f'Artwork {artwork_id} not found.')
-            else:
-                print(f'Skipped: artwork_id missing or order already exists.')
-        else:
-            print(f'Skipped: payment_status is not paid, got {payment_status}.')
+        if payment_status == 'paid' and artwork_id:
+            try:
+                artwork = Artwork.objects.get(pk=artwork_id)
+                shipping = session.get('shipping_details') or session.get('shipping') or {}
+                shipping_address_obj = shipping.get('address', {})
+                shipping_address = ', '.join(filter(None, [
+                    shipping_address_obj.get('line1', ''),
+                    shipping_address_obj.get('line2', ''),
+                    shipping_address_obj.get('city', ''),
+                    shipping_address_obj.get('state', ''),
+                    shipping_address_obj.get('postal_code', ''),
+                    shipping_address_obj.get('country', ''),
+                ]))
+                order, created = Order.objects.get_or_create(
+                    stripe_session_id=session['id'],
+                    defaults={
+                        'artwork': artwork,
+                        'buyer_email': session.get('customer_details', {}).get('email', ''),
+                        'amount': artwork.price,
+                        'paid': True,
+                        'shipping_name': shipping.get('name', ''),
+                        'shipping_address': shipping_address,
+                    }
+                )
+                if not created and not order.shipping_address:
+                    order.shipping_name = shipping.get('name', '')
+                    order.shipping_address = shipping_address
+                    order.save()
+                artwork.is_sold = True
+                artwork.save()
+            except Artwork.DoesNotExist:
+                pass
 
     return HttpResponse(status=200)
 
