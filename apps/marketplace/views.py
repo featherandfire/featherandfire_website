@@ -1,4 +1,3 @@
-import logging
 import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
@@ -7,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 
-logger = logging.getLogger(__name__)
 from .models import Artwork, Order
 from .forms import SellerApplicationForm
 from apps.users.models import ArtistProfile
@@ -93,21 +91,13 @@ def stripe_webhook(request):
         session = event['data']['object']
         payment_status = session.get('payment_status')
         artwork_id = session.get('metadata', {}).get('artwork_id')
-        print(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
 
-        print(f'DEBUG: payment_status={payment_status!r}, artwork_id={artwork_id!r}')
         if payment_status == 'paid' and artwork_id:
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
-                print(f'DEBUG: artwork found: {artwork}')
-                try:
-                    full_session = stripe.checkout.Session.retrieve(session['id'])
-                except Exception as e:
-                    print(f'STRIPE RETRIEVE ERROR: {e}')
-                    full_session = session
+                full_session = stripe.checkout.Session.retrieve(session['id'])
                 collected = full_session.get('collected_information') or {}
-                shipping = collected.get('shipping_details') or full_session.get('shipping_details') or full_session.get('shipping') or {}
-                print(f'DEBUG shipping: {shipping}')
+                shipping = collected.get('shipping_details') or full_session.get('shipping_details') or {}
                 shipping_address_obj = shipping.get('address', {})
                 shipping_address = ', '.join(filter(None, [
                     shipping_address_obj.get('line1', ''),
