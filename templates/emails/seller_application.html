@@ -1,0 +1,37 @@
+{% extends "emails/base_email.html" %}
+{% block subject %}New seller application — {{ name }}{% endblock %}
+{% block content %}
+
+  <p style="margin:0 0 4px;font-family:Georgia,serif;font-style:italic;font-weight:300;font-size:24px;color:#e8dfd0;">New seller application</p>
+  <div style="width:32px;height:1px;background:#C0622A;margin:12px 0 20px;"></div>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid rgba(255,255,255,0.06);margin-bottom:24px;">
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#8a8278;">Name</p>
+        <p style="margin:4px 0 0;font-family:Georgia,serif;font-style:italic;font-size:18px;color:#e8dfd0;">{{ name }}</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#8a8278;">Email</p>
+        <p style="margin:4px 0 0;font-family:Arial,sans-serif;font-size:13px;color:#e8dfd0;">{{ email }}</p>
+      </td>
+    </tr>
+    {% if portfolio_url %}
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#8a8278;">Portfolio</p>
+        <p style="margin:4px 0 0;font-family:Arial,sans-serif;font-size:13px;"><a href="{{ portfolio_url }}" style="color:#C0622A;">{{ portfolio_url }}</a></p>
+      </td>
+    </tr>
+    {% endif %}
+    <tr>
+      <td style="padding:14px 0;">
+        <p style="margin:0;font-family:Arial,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#8a8278;">Message</p>
+        <p style="margin:4px 0 0;font-family:Arial,sans-serif;font-size:13px;color:#e8dfd0;line-height:1.7;">{{ message }}</p>
+      </td>
+    </tr>
+  </table>
+
+{% endblock %}
