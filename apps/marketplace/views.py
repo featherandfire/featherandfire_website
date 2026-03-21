@@ -99,7 +99,8 @@ def stripe_webhook(request):
             if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
                 try:
                     artwork = Artwork.objects.get(pk=artwork_id)
-                    shipping = session.get('shipping_details') or {}
+                    shipping = session.get('shipping_details') or session.get('shipping') or {}
+                    print(f'Shipping raw: {shipping}')
                     shipping_address_obj = shipping.get('address', {})
                     shipping_address = ', '.join(filter(None, [
                         shipping_address_obj.get('line1', ''),
