@@ -2,7 +2,8 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from .models import Artwork, Order
 from .forms import SellerApplicationForm
@@ -133,6 +134,25 @@ def artist_shop(request, pk):
     return render(request, 'artist_shop.html', {
         'profile': profile,
         'artworks': artworks,
+    })
+
+
+@login_required
+def dashboard(request):
+    if not request.user.is_seller:
+        return HttpResponseForbidden()
+    profile = getattr(request.user, 'artist_profile', None)
+    artworks = Artwork.objects.filter(artist=request.user).order_by('-created_at')
+    sold = artworks.filter(is_sold=True)
+    total_sales = sum(
+        order.amount for order in Order.objects.filter(artwork__artist=request.user, paid=True)
+    )
+    return render(request, 'dashboard.html', {
+        'profile': profile,
+        'artworks': artworks,
+        'sold_count': sold.count(),
+        'available_count': artworks.filter(is_sold=False).count(),
+        'total_sales': total_sales,
     })
 
 

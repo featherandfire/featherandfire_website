@@ -55,6 +55,9 @@
             <!-- Auth (desktop) -->
             <div class="hidden md:flex items-center gap-6">
                 {% if user.is_authenticated %}
+                    {% if user.is_seller %}
+                    <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                    {% endif %}
                     <span class="nav-link" style="color: #8a8278; cursor: default;">{{ user.email }}</span>
                     <a href="{% url 'account_logout' %}" class="nav-link">Logout</a>
                 {% else %}

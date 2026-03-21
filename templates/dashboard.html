@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard — Feather & Fire{% endblock %}
+{% block content %}
+
+<section class="pt-24 pb-16 min-h-screen" style="background: #1a1714;">
+    <div class="max-w-6xl mx-auto px-6 lg:px-10">
+
+        <!-- Header -->
+        <div class="mb-12">
+            <p class="text-xs uppercase tracking-widest mb-3" style="color: #C0622A;">Artist dashboard</p>
+            <h1 class="font-display font-light" style="font-size: clamp(2rem, 4vw, 3rem); color: #e8dfd0;">
+                {% if profile %}<em>{{ profile.display_name }}</em>{% else %}<em>Your Studio</em>{% endif %}
+            </h1>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 mb-14">
+            <div style="background: #141210; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 4px; padding: 1.5rem;">
+                <p class="font-display font-light text-3xl mb-1" style="color: #e8dfd0;">{{ artworks.count }}</p>
+                <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Total works</p>
+            </div>
+            <div style="background: #141210; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 4px; padding: 1.5rem;">
+                <p class="font-display font-light text-3xl mb-1" style="color: #C0622A;">{{ sold_count }}</p>
+                <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Sold</p>
+            </div>
+            <div style="background: #141210; border: 0.5px solid rgba(255,255,255,0.07); border-radius: 4px; padding: 1.5rem;">
+                <p class="font-display font-light text-3xl mb-1" style="color: #e8dfd0;">${{ total_sales }}</p>
+                <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Total sales</p>
+            </div>
+        </div>
+
+        <!-- Artworks -->
+        <div class="mb-6 flex items-center justify-between">
+            <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Your listings</p>
+        </div>
+
+        {% if artworks %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for artwork in artworks %}
+            <div style="border: 0.5px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; background: #141210;">
+
+                <!-- Image -->
+                <div style="aspect-ratio: 4/3; overflow: hidden; background: #252119; position: relative;">
+                    {% if artwork.image %}
+                    <img src="{{ artwork.image.url }}" alt="{{ artwork.title }}"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                    {% endif %}
+                    {% if artwork.is_sold %}
+                    <div style="position: absolute; inset: 0; background: rgba(20,18,16,0.6); display: flex; align-items: center; justify-content: center;">
+                        <span class="text-xs uppercase tracking-widest px-4 py-2"
+                              style="border: 1px solid #8a8278; color: #8a8278; letter-spacing: 0.2em;">Sold</span>
+                    </div>
+                    {% else %}
+                    <div style="position: absolute; top: 0.75rem; right: 0.75rem;">
+                        <span class="text-xs uppercase tracking-widest px-3 py-1"
+                              style="background: rgba(20,18,16,0.8); border: 0.5px solid #C0622A; color: #C0622A; letter-spacing: 0.1em;">Available</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <div class="p-5">
+                    <div class="flex items-start justify-between gap-3 mb-1">
+                        <p class="font-display font-light text-lg leading-tight" style="color: #e8dfd0;">
+                            <em>{{ artwork.title }}</em>
+                        </p>
+                        <p class="font-display text-lg shrink-0" style="color: #C0622A;">${{ artwork.price }}</p>
+                    </div>
+                    <p class="text-xs uppercase tracking-widest mb-4" style="color: #8a8278;">
+                        {{ artwork.get_medium_display }}
+                    </p>
+                    <a href="{% url 'artwork_detail' artwork.pk %}" class="text-xs uppercase tracking-widest"
+                       style="color: #C0622A; letter-spacing: 0.15em;">View →</a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="text-center py-24">
+            <p class="font-display font-light text-2xl mb-4" style="color: #e8dfd0;"><em>No artwork yet</em></p>
+            <p class="text-xs uppercase tracking-widest" style="color: #8a8278;">Your listings will appear here once added by the admin.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

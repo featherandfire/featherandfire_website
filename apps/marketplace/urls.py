@@ -12,4 +12,5 @@ urlpatterns = [
     path('artists/<int:pk>/', views.artist_shop, name='artist_shop'),
     path('order/success/', views.order_success, name='order_success'),
     path('webhooks/stripe/', views.stripe_webhook, name='stripe_webhook'),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]
