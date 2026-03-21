@@ -47,6 +47,12 @@ def about(request):
 
 def checkout(request, pk):
     artwork = get_object_or_404(Artwork, pk=pk, is_sold=False)
+    artist_profile = getattr(artwork.artist, 'artist_profile', None)
+    artist_name = artist_profile.display_name if artist_profile else artwork.artist.email
+    product_description = f'{artwork.get_medium_display()} by {artist_name}'
+    if artwork.description:
+        product_description += f' — {artwork.description[:200]}'
+
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
         line_items=[{
@@ -55,7 +61,7 @@ def checkout(request, pk):
                 'unit_amount': int(artwork.price * 100),
                 'product_data': {
                     'name': artwork.title,
-                    'description': artwork.description[:255] if artwork.description else '',
+                    'description': product_description,
                 },
             },
             'quantity': 1,
@@ -63,7 +69,7 @@ def checkout(request, pk):
         mode='payment',
         success_url=request.build_absolute_uri(f'/order/success/?session_id={{CHECKOUT_SESSION_ID}}'),
         cancel_url=request.build_absolute_uri(f'/artwork/{pk}/'),
-        metadata={'artwork_id': pk},
+        metadata={'artwork_id': pk, 'artist': artist_name},
     )
     return redirect(session.url, permanent=False)
 
