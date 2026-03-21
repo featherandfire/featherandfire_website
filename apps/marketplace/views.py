@@ -65,12 +65,6 @@ def checkout(request, pk):
         cancel_url=request.build_absolute_uri(f'/artwork/{pk}/'),
         metadata={'artwork_id': pk},
     )
-    Order.objects.create(
-        artwork=artwork,
-        buyer_email='',
-        stripe_session_id=session.id,
-        amount=artwork.price,
-    )
     return redirect(session.url, permanent=False)
 
 
@@ -85,20 +79,24 @@ def stripe_webhook(request):
     except (ValueError, stripe.error.SignatureVerificationError):
         return HttpResponse(status=400)
 
-    if event['type'] == 'payment_intent.succeeded':
-        payment_intent = event['data']['object']
-        try:
-            sessions = stripe.checkout.Session.list(payment_intent=payment_intent['id'])
-            if sessions.data:
-                session = sessions.data[0]
-                order = Order.objects.get(stripe_session_id=session['id'])
-                order.paid = True
-                order.buyer_email = session.get('customer_details', {}).get('email', '')
-                order.save()
-                order.artwork.is_sold = True
-                order.artwork.save()
-        except Order.DoesNotExist:
-            pass
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        if session.get('payment_status') == 'paid':
+            artwork_id = session.get('metadata', {}).get('artwork_id')
+            if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
+                try:
+                    artwork = Artwork.objects.get(pk=artwork_id)
+                    Order.objects.create(
+                        artwork=artwork,
+                        buyer_email=session.get('customer_details', {}).get('email', ''),
+                        stripe_session_id=session['id'],
+                        amount=artwork.price,
+                        paid=True,
+                    )
+                    artwork.is_sold = True
+                    artwork.save()
+                except Artwork.DoesNotExist:
+                    pass
 
     return HttpResponse(status=200)
 
