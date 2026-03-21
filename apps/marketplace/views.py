@@ -92,7 +92,7 @@ def stripe_webhook(request):
         session = event['data']['object']
         payment_status = session.get('payment_status')
         artwork_id = session.get('metadata', {}).get('artwork_id')
-        logger.warning(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
+        print(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
 
         if payment_status == 'paid':
             if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
@@ -107,13 +107,13 @@ def stripe_webhook(request):
                     )
                     artwork.is_sold = True
                     artwork.save()
-                    logger.warning(f'Artwork {artwork_id} marked as sold.')
+                    print(f'Artwork {artwork_id} marked as sold.')
                 except Artwork.DoesNotExist:
-                    logger.warning(f'Artwork {artwork_id} not found.')
+                    print(f'Artwork {artwork_id} not found.')
             else:
-                logger.warning(f'Skipped: artwork_id missing or order already exists.')
+                print(f'Skipped: artwork_id missing or order already exists.')
         else:
-            logger.warning(f'Skipped: payment_status is not paid, got {payment_status}.')
+            print(f'Skipped: payment_status is not paid, got {payment_status}.')
 
     return HttpResponse(status=200)
 
