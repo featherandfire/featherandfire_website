@@ -95,9 +95,11 @@ def stripe_webhook(request):
         artwork_id = session.get('metadata', {}).get('artwork_id')
         print(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
 
+        print(f'DEBUG: payment_status={payment_status!r}, artwork_id={artwork_id!r}')
         if payment_status == 'paid' and artwork_id:
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
+                print(f'DEBUG: artwork found: {artwork}')
                 full_session = stripe.checkout.Session.retrieve(session['id'])
                 print(f'FULL SESSION SHIPPING: {full_session.get("shipping_details")} | {full_session.get("shipping")} | customer: {full_session.get("customer_details")}')
                 shipping = full_session.get('shipping_details') or full_session.get('shipping') or {}
