@@ -1,3 +1,4 @@
+import logging
 import stripe
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
@@ -5,6 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
+
+logger = logging.getLogger(__name__)
 from .models import Artwork, Order
 from .forms import SellerApplicationForm
 from apps.users.models import ArtistProfile
@@ -87,8 +90,11 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        if session.get('payment_status') == 'paid':
-            artwork_id = session.get('metadata', {}).get('artwork_id')
+        payment_status = session.get('payment_status')
+        artwork_id = session.get('metadata', {}).get('artwork_id')
+        logger.warning(f'Webhook received: payment_status={payment_status}, artwork_id={artwork_id}, session_id={session["id"]}')
+
+        if payment_status == 'paid':
             if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
                 try:
                     artwork = Artwork.objects.get(pk=artwork_id)
@@ -101,8 +107,13 @@ def stripe_webhook(request):
                     )
                     artwork.is_sold = True
                     artwork.save()
+                    logger.warning(f'Artwork {artwork_id} marked as sold.')
                 except Artwork.DoesNotExist:
-                    pass
+                    logger.warning(f'Artwork {artwork_id} not found.')
+            else:
+                logger.warning(f'Skipped: artwork_id missing or order already exists.')
+        else:
+            logger.warning(f'Skipped: payment_status is not paid, got {payment_status}.')
 
     return HttpResponse(status=200)
 
