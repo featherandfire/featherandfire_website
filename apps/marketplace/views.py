@@ -99,6 +99,7 @@ def stripe_webhook(request):
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
                 full_session = stripe.checkout.Session.retrieve(session['id'])
+                print(f'FULL SESSION SHIPPING: {full_session.get("shipping_details")} | {full_session.get("shipping")} | customer: {full_session.get("customer_details")}')
                 shipping = full_session.get('shipping_details') or full_session.get('shipping') or {}
                 shipping_address_obj = shipping.get('address', {})
                 shipping_address = ', '.join(filter(None, [
