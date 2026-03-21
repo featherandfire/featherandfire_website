@@ -100,9 +100,13 @@ def stripe_webhook(request):
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
                 print(f'DEBUG: artwork found: {artwork}')
-                full_session = stripe.checkout.Session.retrieve(session['id'])
-                print(f'FULL SESSION KEYS: {list(full_session.keys())}')
-                print(f'FULL SESSION SHIPPING: {full_session.get("shipping_details")} | {full_session.get("shipping")} | customer: {full_session.get("customer_details")}')
+                try:
+                    full_session = stripe.checkout.Session.retrieve(session['id'])
+                    print(f'FULL SESSION KEYS: {list(full_session.keys())}')
+                    print(f'FULL SESSION SHIPPING: {full_session.get("shipping_details")} | {full_session.get("shipping")}')
+                except Exception as e:
+                    print(f'STRIPE RETRIEVE ERROR: {e}')
+                    full_session = session
                 shipping = full_session.get('shipping_details') or full_session.get('shipping') or {}
                 shipping_address_obj = shipping.get('address', {})
                 shipping_address = ', '.join(filter(None, [
