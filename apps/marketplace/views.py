@@ -70,6 +70,7 @@ def checkout(request, pk):
             'quantity': 1,
         }],
         mode='payment',
+        shipping_address_collection={'allowed_countries': ['US', 'CA']},
         success_url=request.build_absolute_uri(f'/order/success/?session_id={{CHECKOUT_SESSION_ID}}'),
         cancel_url=request.build_absolute_uri(f'/artwork/{pk}/'),
         metadata={'artwork_id': pk, 'artist': artist_name},
@@ -98,12 +99,24 @@ def stripe_webhook(request):
             if artwork_id and not Order.objects.filter(stripe_session_id=session['id']).exists():
                 try:
                     artwork = Artwork.objects.get(pk=artwork_id)
+                    shipping = session.get('shipping_details') or {}
+                    shipping_address_obj = shipping.get('address', {})
+                    shipping_address = ', '.join(filter(None, [
+                        shipping_address_obj.get('line1', ''),
+                        shipping_address_obj.get('line2', ''),
+                        shipping_address_obj.get('city', ''),
+                        shipping_address_obj.get('state', ''),
+                        shipping_address_obj.get('postal_code', ''),
+                        shipping_address_obj.get('country', ''),
+                    ]))
                     Order.objects.create(
                         artwork=artwork,
                         buyer_email=session.get('customer_details', {}).get('email', ''),
                         stripe_session_id=session['id'],
                         amount=artwork.price,
                         paid=True,
+                        shipping_name=shipping.get('name', ''),
+                        shipping_address=shipping_address,
                     )
                     artwork.is_sold = True
                     artwork.save()

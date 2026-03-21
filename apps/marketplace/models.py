@@ -56,6 +56,8 @@ class Order(models.Model):
     stripe_session_id = models.CharField(max_length=200, unique=True)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     paid = models.BooleanField(default=False)
+    shipping_name = models.CharField(max_length=200, blank=True)
+    shipping_address = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
