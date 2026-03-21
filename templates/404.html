@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — Feather & Fire{% endblock %}
+
+{% block content %}
+<section class="min-h-screen flex items-center justify-center py-24 relative" style="background: #1a1714;">
+
+    <div style="position: absolute; top: 30%; left: 50%; transform: translateX(-50%); width: 600px; height: 400px; background: radial-gradient(circle, rgba(192,98,42,0.05) 0%, transparent 70%); pointer-events: none;"></div>
+    <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none;"></div>
+
+    <div class="text-center relative z-10 px-6">
+        <p class="font-display font-light italic mb-4" style="font-size: clamp(5rem, 15vw, 10rem); color: #2e2a24; line-height: 1;">404</p>
+        <div style="width: 40px; height: 1px; background: #C0622A; margin: 0 auto 2rem;"></div>
+        <h1 class="font-display font-light text-2xl mb-3" style="color: #e8dfd0;">This page has moved on</h1>
+        <p class="text-xs uppercase tracking-widest mb-10" style="color: #8a8278; font-family: 'Josefin Sans', sans-serif;">
+            The piece you're looking for no longer exists here
+        </p>
+        <div class="flex items-center justify-center gap-6 flex-wrap">
+            <a href="/" class="px-8 py-3 text-xs uppercase tracking-widest transition-all duration-300"
+               style="background: #C0622A; color: #1a1714; letter-spacing: 0.15em;"
+               onmouseover="this.style.background='#D97B44'" onmouseout="this.style.background='#C0622A'">
+                Back Home
+            </a>
+            <a href="/gallery/" class="text-xs uppercase tracking-widest"
+               style="color: #8a8278; letter-spacing: 0.15em; border-bottom: 1px solid #3a3530; transition: color 0.3s;"
+               onmouseover="this.style.color='#C0622A'" onmouseout="this.style.color='#8a8278'">
+                Browse Gallery
+            </a>
+        </div>
+    </div>
+
+</section>
+{% endblock %}

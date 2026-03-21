@@ -68,18 +68,45 @@
         {{ hero_artwork_urls|json_script:"hero-artwork-data" }}
         <script>
             const heroImages = JSON.parse(document.getElementById('hero-artwork-data').textContent);
-
-            const slots = document.querySelectorAll('.hero-slot img');
+            const slots = document.querySelectorAll('.hero-slot');
             let offset = 0;
 
+            function crossFadeSlot(slot, newSrc, delay) {
+                setTimeout(() => {
+                    const current = slot.querySelector('img.active');
+                    const next = slot.querySelector('img.next');
+
+                    next.src = newSrc;
+                    next.onload = () => {
+                        next.style.opacity = 1;
+                        setTimeout(() => {
+                            if (current) current.style.opacity = 0;
+                            next.classList.add('active');
+                            next.classList.remove('next');
+                            if (current) {
+                                current.classList.add('next');
+                                current.classList.remove('active');
+                                current.style.opacity = 0;
+                            }
+                        }, 600);
+                    };
+                }, delay);
+            }
+
+            // Init slots with two stacked images for cross-fade
+            slots.forEach((slot, i) => {
+                slot.style.position = 'relative';
+                ['active', 'next'].forEach(cls => {
+                    const img = document.createElement('img');
+                    img.className = cls;
+                    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.8s ease;opacity:0;';
+                    slot.appendChild(img);
+                });
+            });
+
             function loadImages() {
-                slots.forEach((img, i) => {
-                    const src = heroImages[(offset + i) % heroImages.length];
-                    img.style.opacity = 0;
-                    setTimeout(() => {
-                        img.src = src;
-                        img.onload = () => img.style.opacity = 1;
-                    }, i * 150);
+                slots.forEach((slot, i) => {
+                    crossFadeSlot(slot, heroImages[(offset + i) % heroImages.length], i * 150);
                 });
                 offset = (offset + 4) % heroImages.length;
             }
