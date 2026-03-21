@@ -86,6 +86,13 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'  # change to 'mandatory' when email is set u
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+ACCOUNT_RATE_LIMITS = {
+    'login_failed': '5/5m',   # 5 failed logins per 5 minutes per IP
+    'signup': '5/h',           # 5 signups per hour per IP
+    'send_email': '3/h',
+    'login': '30/h',
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
