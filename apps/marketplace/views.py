@@ -1,5 +1,6 @@
 import stripe
 from django.conf import settings
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,7 +35,21 @@ def apply(request):
     if request.method == 'POST':
         form = SellerApplicationForm(request.POST)
         if form.is_valid():
-            form.save()
+            application = form.save()
+            if settings.ADMIN_EMAIL:
+                send_mail(
+                    subject=f'New seller application — {application.name}',
+                    message=(
+                        f'A new seller application has been submitted.\n\n'
+                        f'Name: {application.name}\n'
+                        f'Email: {application.email}\n'
+                        f'Portfolio: {application.portfolio_url}\n\n'
+                        f'Message:\n{application.message}'
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[settings.ADMIN_EMAIL],
+                    fail_silently=True,
+                )
             messages.success(request, 'Your application has been submitted. We\'ll be in touch soon.')
             return redirect('apply')
     else:
@@ -124,6 +139,37 @@ def stripe_webhook(request):
                     order.save()
                 artwork.is_sold = True
                 artwork.save()
+
+                buyer_email = order.buyer_email
+                if buyer_email:
+                    send_mail(
+                        subject=f'Your order — {artwork.title}',
+                        message=(
+                            f'Thank you for your purchase!\n\n'
+                            f'Artwork: {artwork.title}\n'
+                            f'Amount: ${order.amount}\n'
+                            f'Shipping to: {order.shipping_name}, {order.shipping_address}\n\n'
+                            f'We\'ll be in touch once your piece is on its way.\n\n'
+                            f'— Feather & Fire'
+                        ),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[buyer_email],
+                        fail_silently=True,
+                    )
+                if settings.ADMIN_EMAIL:
+                    send_mail(
+                        subject=f'New sale — {artwork.title}',
+                        message=(
+                            f'A new order has been placed.\n\n'
+                            f'Artwork: {artwork.title}\n'
+                            f'Amount: ${order.amount}\n'
+                            f'Buyer: {buyer_email}\n'
+                            f'Ship to: {order.shipping_name}, {order.shipping_address}\n'
+                        ),
+                        from_email=settings.DEFAULT_FROM_EMAIL,
+                        recipient_list=[settings.ADMIN_EMAIL],
+                        fail_silently=True,
+                    )
             except Artwork.DoesNotExist:
                 pass
 
