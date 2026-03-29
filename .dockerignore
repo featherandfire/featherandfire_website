@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+bin/
+lib/
+include/
+pyvenv.cfg
+
+# Node
+node_modules/
+
+# Django
+staticfiles/
+db.sqlite3
+*.log
+media/
+
+# Git
+.git/
+.gitignore
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.yml
+.dockerignore
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+coverage/
+htmlcov/

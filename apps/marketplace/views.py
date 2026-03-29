@@ -107,37 +107,52 @@ def stripe_webhook(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        payment_status = session.get('payment_status')
-        artwork_id = session.get('metadata', {}).get('artwork_id')
+        payment_status = session.payment_status
+        try:
+            artwork_id = session.metadata['artwork_id']
+        except (KeyError, TypeError, AttributeError):
+            artwork_id = None
 
         if payment_status == 'paid' and artwork_id:
             try:
                 artwork = Artwork.objects.get(pk=artwork_id)
-                full_session = stripe.checkout.Session.retrieve(session['id'])
-                collected = full_session.get('collected_information') or {}
-                shipping = collected.get('shipping_details') or full_session.get('shipping_details') or {}
-                shipping_address_obj = shipping.get('address', {})
-                shipping_address = ', '.join(filter(None, [
-                    shipping_address_obj.get('line1', ''),
-                    shipping_address_obj.get('line2', ''),
-                    shipping_address_obj.get('city', ''),
-                    shipping_address_obj.get('state', ''),
-                    shipping_address_obj.get('postal_code', ''),
-                    shipping_address_obj.get('country', ''),
-                ]))
+                full_session = stripe.checkout.Session.retrieve(session.id)
+
+                collected = full_session.collected_information
+                shipping = (collected.shipping_details if collected else None) or full_session.shipping_details
+
+                shipping_name = ''
+                shipping_address = ''
+                if shipping:
+                    shipping_name = shipping.name or ''
+                    addr = shipping.address
+                    if addr:
+                        shipping_address = ', '.join(filter(None, [
+                            addr.line1 or '',
+                            addr.line2 or '',
+                            addr.city or '',
+                            addr.state or '',
+                            addr.postal_code or '',
+                            addr.country or '',
+                        ]))
+
+                buyer_email = ''
+                if session.customer_details:
+                    buyer_email = session.customer_details.email or ''
+
                 order, created = Order.objects.get_or_create(
-                    stripe_session_id=session['id'],
+                    stripe_session_id=session.id,
                     defaults={
                         'artwork': artwork,
-                        'buyer_email': session.get('customer_details', {}).get('email', ''),
+                        'buyer_email': buyer_email,
                         'amount': artwork.price,
                         'paid': True,
-                        'shipping_name': shipping.get('name', ''),
+                        'shipping_name': shipping_name,
                         'shipping_address': shipping_address,
                     }
                 )
                 if not created and not order.shipping_address:
-                    order.shipping_name = shipping.get('name', '')
+                    order.shipping_name = shipping_name
                     order.shipping_address = shipping_address
                     order.save()
                 artwork.is_sold = True
