@@ -1,6 +1,7 @@
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import dj_database_url
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,8 +11,15 @@ load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [h for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h]
 CSRF_TRUSTED_ORIGINS = [o for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',') if o]
+
+# Fly.io auto-config
+FLY_APP_NAME = os.getenv('FLY_APP_NAME')
+if FLY_APP_NAME:
+    ALLOWED_HOSTS += [f'{FLY_APP_NAME}.fly.dev', '.fly.dev']
+    CSRF_TRUSTED_ORIGINS += [f'https://{FLY_APP_NAME}.fly.dev']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 INSTALLED_APPS = [
@@ -69,10 +77,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -123,12 +132,35 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-
-#for nginx
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Media: Cloudflare R2 in production, local filesystem in dev
+USE_R2 = bool(os.getenv('R2_BUCKET_NAME'))
+
+if USE_R2:
+    STORAGES = {
+        'default': {
+            'BACKEND': 'storages.backends.s3.S3Storage',
+            'OPTIONS': {
+                'bucket_name': os.getenv('R2_BUCKET_NAME'),
+                'access_key': os.getenv('R2_ACCESS_KEY_ID'),
+                'secret_key': os.getenv('R2_SECRET_ACCESS_KEY'),
+                'endpoint_url': os.getenv('R2_ENDPOINT_URL'),
+                'region_name': 'auto',
+                'signature_version': 's3v4',
+                'addressing_style': 'virtual',
+                'default_acl': None,
+                'querystring_auth': False,
+            },
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
+    MEDIA_URL = os.getenv('R2_PUBLIC_URL').rstrip('/') + '/'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / 'media'
 
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
