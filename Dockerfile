@@ -8,7 +8,6 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     gcc \
-    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -20,4 +19,4 @@ RUN SECRET_KEY=build-only python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8080", "--workers", "3", "--timeout", "120", "--access-logfile", "-"]
+CMD sh -c "python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8080 --workers 3 --timeout 120 --access-logfile -"

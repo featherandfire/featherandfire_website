@@ -3,11 +3,13 @@ primary_region = "ord"
 
 [build]
 
-[deploy]
-  release_command = "python manage.py migrate --noinput"
-
 [env]
   PORT = "8080"
+  DATABASE_PATH = "/data/db.sqlite3"
+
+[[mounts]]
+  source = "data"
+  destination = "/data"
 
 [http_service]
   internal_port = 8080
