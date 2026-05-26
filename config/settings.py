@@ -132,33 +132,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media: Cloudflare R2 in production, local filesystem in dev
-USE_R2 = bool(os.getenv('R2_BUCKET_NAME'))
-
-if USE_R2:
-    STORAGES = {
-        'default': {
-            'BACKEND': 'storages.backends.s3.S3Storage',
-            'OPTIONS': {
-                'bucket_name': os.getenv('R2_BUCKET_NAME'),
-                'access_key': os.getenv('R2_ACCESS_KEY_ID'),
-                'secret_key': os.getenv('R2_SECRET_ACCESS_KEY'),
-                'endpoint_url': os.getenv('R2_ENDPOINT_URL'),
-                'region_name': 'auto',
-                'signature_version': 's3v4',
-                'addressing_style': 'virtual',
-                'default_acl': None,
-                'querystring_auth': False,
-            },
-        },
-        'staticfiles': {
-            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-        },
-    }
-    MEDIA_URL = os.getenv('R2_PUBLIC_URL').rstrip('/') + '/'
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', BASE_DIR / 'media')
 
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
